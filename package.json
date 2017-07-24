@@ -1,27 +1,29 @@
 {
-	"name": "ghost-upyun-store",
-	"version": "1.1.0",
-	"description": "Upyun store for Ghost blog.",
-	"main": "index.js",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/sanddudu/ghost-upyun-store.git"
-	},
-	"keywords": [
-		"Ghost",
-		"upyun",
-		"ghost-store"
-	],
-	"author": "Klion Xu",
-	"license": "MIT",
-	"bugs": {
-		"url": "https://github.com/sanddudu/ghost-upyun-store/issues"
-	},
-	"homepage": "https://github.com/sanddudu/ghost-upyun-store",
-	"dependencies": {
-		"upyun": "2.0.4",
-		"bluebird": "3.4.1",
-		"moment": "2.14.1",
-		"fs-extra": "0.30.0"
-	}
+  "name": "ghost-upyun-store",
+  "version": "1.0.0",
+  "description": "Ghost Upyun storage module.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pupboss/ghost-upyun-store.git"
+  },
+  "keywords": [
+    "upyun",
+    "ghost",
+    "storage"
+  ],
+  "author": "Jet Lee",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pupboss/ghost-upyun-store/issues"
+  },
+  "homepage": "https://github.com/pupboss/ghost-upyun-store#readme",
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "moment": "^2.18.1",
+    "upyun": "^3.1.1"
+  }
 }
