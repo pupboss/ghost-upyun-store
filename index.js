@@ -27,10 +27,10 @@ UpyunAdapter.prototype.save = function(image) {
 		var remotePath = _this.getRemotePath(image);
 		var remoteURL = _this.options.domain;
 		upyun.putFile(remotePath, image.path, null, false, {}, function (err, result) {
-			if (err || result.statusCode != 200) {
+			if (err || result.statusCode !== 200) {
 				reject('[' + result.data.code + '] ' + result.data.msg);
 			} else {
-				if (_this.options.imageVersion != undefined) {
+				if (_this.options.imageVersion !== undefined) {
 					resolve(remoteURL + remotePath + _this.options.imageVersion);
 				} else {
 					resolve(remoteURL + remotePath);
