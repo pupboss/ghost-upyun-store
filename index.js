@@ -2,9 +2,9 @@
 
 const Promise = require('bluebird');
 const upyun = require('upyun');
+const fs = require('fs');
 const urlParse = require('url').parse;
 const moment = require('moment');
-const util = require('util');
 const BaseAdapter = require('ghost-storage-base');
 
 class UpyunAdapter extends BaseAdapter {
@@ -31,7 +31,7 @@ class UpyunAdapter extends BaseAdapter {
     return new Promise(function(resolve, reject) {
       const remotePath = _this.getRemotePath(file);
       const remoteDomain = _this.options.domain;
-      client.putFile(remotePath, file.path).then(function(result) {
+      client.putFile(remotePath, fs.readFileSync(file.path)).then(function(result) {
         if (_this.options.imageVersion !== undefined) {
           resolve(remoteDomain + remotePath + _this.options.imageVersion);
         } else {
