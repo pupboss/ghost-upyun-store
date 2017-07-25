@@ -1,64 +1,89 @@
 'use strict';
 
 const Promise = require('bluebird');
-const yun = require('upyun');
+const upyun = require('upyun');
 const moment = require('moment');
 const util = require('util');
 const BaseAdapter = require('ghost-storage-base');
 
-function UpyunAdapter(config) {
-  BaseAdapter.call(this);
-  this.options = config || {};
-}
+class UpyunAdapter extends BaseAdapter {
+  constructor(options) {
+    super(options);
+    this.options = options || {};
+    this.client = new yun(this.options.bucket, this.options.operator, this.options.password, 'v0.api.upyun.com', { apiVersion: 'v2' });
+  }
 
-util.inherits(UpyunAdapter, BaseAdapter);
+  /**
+   * Saves the image to storage
+   * - image is the express image object
+   * - returns a promise which ultimately returns the full url to the uploaded image
+   *
+   * @param file
+   * @param targetDir
+   * @returns {*}
+   */
+  save(file, targetDir) {
+    const client = this.client;
+    const _this = this;
 
-UpyunAdapter.prototype.save = function (image) {
-
-  const _this = this;
-
-  var upyun = new yun(this.options.bucket, this.options.operator, this.options.password, 'v0.api.upyun.com', {apiVersion: 'v2'});
-
-  return new Promise (function (resolve, reject) {
-    var remotePath = _this.getRemotePath(image);
-    var remoteURL = _this.options.domain;
-    upyun.putFile(remotePath, image.path, null, false, {}, function (err, result) {
-      if (err || result.statusCode !== 200) {
-        reject('[' + result.data.code + '] ' + result.data.msg);
-      } else {
-        if (_this.options.imageVersion !== undefined) {
-          resolve(remoteURL + remotePath + _this.options.imageVersion);
+    return new Promise(function(resolve, reject) {
+      const remotePath = _this.getRemotePath(file);
+      const remoteURL = _this.options.domain;
+      client.putFile(remotePath, file.path, null, false, {}, function (err, result) {
+        if (err || result.statusCode !== 200) {
+          reject('[' + result.data.code + '] ' + result.data.msg);
         } else {
-          resolve(remoteURL + remotePath);
+          if (_this.options.imageVersion !== undefined) {
+            resolve(remoteURL + remotePath + _this.options.imageVersion);
+          } else {
+            resolve(remoteURL + remotePath);
+          }
         }
-      }
+      });
     });
-  });
-};
+  }
 
-// middleware for serving the files
-UpyunAdapter.prototype.serve = function () {
-  // a no-op, these are absolute URLs
-  return function (req, res, next) {
-    next();
-  };
-};
+  /**
+   * don't need it in Upyun
+   * @param filename
+   * @param targetDir
+   * @returns {*|bluebird}
+   * @see https://support.qiniu.com/hc/kb/article/112817/
+   * TODO: if fileKey option set, should use key to check file whether exists
+   */
+  exists(filename, targetDir) {
+    return new Promise(function(resolve, reject) {
+      resolve(false);
+    });
+  }
 
-UpyunAdapter.prototype.exists = function () {
-  // Server side will automatically replace the file.
-  return false;
-};
+  // middleware for serving the files
+  serve() {
+    // a no-op, these are absolute URLs
+    return function(req, res, next) {
+      next();
+    };
+  }
 
-UpyunAdapter.prototype.delete = function () {
-  //For backup and security purposes there is no way to delete files
-  //whatever on local or server side through Ghost, please do it manually.
-  return true;
-};
+  /**
+   * Not implemented.
+   * @description not really delete from Qiniu, may be implemented later
+   * @param fileName
+   * @param targetDir
+   * @returns {*|bluebird}
+   */
+  delete(fileName, targetDir) {
+    // return Promise.reject('not implemented');
+    return new Promise(function(resolve, reject) {
+      resolve(true);
+    });
+  }
 
-UpyunAdapter.prototype.getRemotePath = function (image) {
-  var folder = moment().format(this.options.folder || 'YYYY/MM/').replace(/^\//, '');
+  getRemotePath(image) {
+    const folder = moment().format(this.options.folder || 'YYYY/MM/').replace(/^\//, '');
 
-  return '/' + this.options.prefix + folder + image.name;
-};
+    return '/' + this.options.prefix + folder + image.name;
+  }
+}
 
 module.exports = UpyunAdapter;
