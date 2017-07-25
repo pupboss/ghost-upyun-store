@@ -10,7 +10,7 @@ class UpyunAdapter extends BaseAdapter {
   constructor(options) {
     super(options);
     this.options = options || {};
-    this.client = new yun(this.options.bucket, this.options.operator, this.options.password, 'v0.api.upyun.com', { apiVersion: 'v2' });
+    this.client = new upyun(this.options.bucket, this.options.operator, this.options.password, 'v0.api.upyun.com', { apiVersion: 'v2' });
   }
 
   /**
