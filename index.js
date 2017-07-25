@@ -11,7 +11,7 @@ class UpyunAdapter extends BaseAdapter {
   constructor(options) {
     super(options);
     this.options = options || {};
-    this.client = new upyun(this.options.bucket, this.options.operator, this.options.password, 'v0.api.upyun.com', { apiVersion: 'v2' });
+    this.client = new upyun.Client(new upyun.Bucket(this.options.bucket, this.options.operator, this.options.password));
   }
 
   /**
@@ -29,18 +29,16 @@ class UpyunAdapter extends BaseAdapter {
 
     return new Promise(function(resolve, reject) {
       const remotePath = _this.getRemotePath(file);
-      const remoteURL = _this.options.domain;
-      client.putFile(remotePath, file.path, null, false, {}, function (err, result) {
-        if (err || result.statusCode !== 200) {
-          reject('[' + result.data.code + '] ' + result.data.msg);
+      const remoteDomain = _this.options.domain;
+      client.putFile(remotePath, file.path).then(function (result) {
+        if (_this.options.imageVersion !== undefined) {
+          resolve(remoteDomain + remotePath + _this.options.imageVersion);
         } else {
-          if (_this.options.imageVersion !== undefined) {
-            resolve(remoteURL + remotePath + _this.options.imageVersion);
-          } else {
-            resolve(remoteURL + remotePath);
-          }
+          resolve(remoteDomain + remotePath);
         }
-      });
+      }, function (error) {
+        reject('[' + result.data.code + '] ' + result.data.msg);
+      })
     });
   }
 
@@ -91,12 +89,11 @@ class UpyunAdapter extends BaseAdapter {
     const key = urlParse(options.path).pathname.slice(1);
 
     return new Promise(function(resolve, reject) {
-      client.getFile(key, function(err, result) {
-        if (err) {
-          return reject('Could not read image');
-        }
+      client.getFile(key).then(function (result) {
         resolve(result);
-      });
+      }, function (error) {
+        reject('Could not read image');
+      })
     });
   }
 
