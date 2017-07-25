@@ -2,6 +2,7 @@
 
 const Promise = require('bluebird');
 const upyun = require('upyun');
+const urlParse = require('url').parse;
 const moment = require('moment');
 const util = require('util');
 const BaseAdapter = require('ghost-storage-base');
@@ -48,7 +49,6 @@ class UpyunAdapter extends BaseAdapter {
    * @param filename
    * @param targetDir
    * @returns {*|bluebird}
-   * @see https://support.qiniu.com/hc/kb/article/112817/
    * TODO: if fileKey option set, should use key to check file whether exists
    */
   exists(filename, targetDir) {
@@ -67,7 +67,7 @@ class UpyunAdapter extends BaseAdapter {
 
   /**
    * Not implemented.
-   * @description not really delete from Qiniu, may be implemented later
+   * @description not really delete from Upyun, may be implemented later
    * @param fileName
    * @param targetDir
    * @returns {*|bluebird}
@@ -76,6 +76,27 @@ class UpyunAdapter extends BaseAdapter {
     // return Promise.reject('not implemented');
     return new Promise(function(resolve, reject) {
       resolve(true);
+    });
+  }
+
+  /**
+   * Reads bytes from Upyun for a target image
+   *
+   * @param options
+   */
+  read(options) {
+    options = options || {};
+
+    const client = this.client;
+    const key = urlParse(options.path).pathname.slice(1);
+
+    return new Promise(function(resolve, reject) {
+      client.getFile(key, function(err, result) {
+        if (err) {
+          return reject('Could not read image');
+        }
+        resolve(result);
+      });
     });
   }
 
