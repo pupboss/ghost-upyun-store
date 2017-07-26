@@ -1,6 +1,6 @@
 # Ghost Upyun Storage
 
-This project is forked from 'sanddudu/upyun-ghost-store'.
+This project is forked from `sanddudu/upyun-ghost-store`.
 
 本项目 fork 自 `sanddudu/upyun-ghost-store`.
 
