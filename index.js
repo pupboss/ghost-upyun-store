@@ -32,8 +32,8 @@ class UpyunAdapter extends BaseAdapter {
       const remotePath = _this.getRemotePath(file);
       const remoteDomain = _this.options.domain;
       client.putFile(remotePath, fs.readFileSync(file.path)).then(function(result) {
-        if (_this.options.imageVersion !== undefined) {
-          resolve(remoteDomain + remotePath + _this.options.imageVersion);
+        if (_this.options.suffix !== undefined) {
+          resolve(remoteDomain + remotePath + _this.options.suffix);
         } else {
           resolve(remoteDomain + remotePath);
         }
@@ -72,7 +72,7 @@ class UpyunAdapter extends BaseAdapter {
    * @returns {*|bluebird}
    */
   delete(fileName, targetDir) {
-    // return Promise.reject('not implemented');
+
     return new Promise(function(resolve, reject) {
       resolve(true);
     });

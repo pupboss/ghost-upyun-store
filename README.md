@@ -1,6 +1,7 @@
 # Ghost Upyun Storage
 
 This project is forked from 'sanddudu/upyun-ghost-store'.
+
 本项目 fork 自 `sanddudu/upyun-ghost-store`.
 
 This [Ghost custom storage module](https://docs.ghost.org/docs/using-a-custom-storage-module) allows you to store media files at [Upyun](https://www.upyun.com) instead of your local server. It requires Ghost 1.x or higher version!
@@ -37,18 +38,26 @@ In your `config.[env].json` file, you'll need to add a new `storage` block:
   "storage": {
     "active": "ghost-upyun-store",
     "ghost-upyun-store": {
-      "bucket": "bucket-name",
-      "operator": "some-operator",
-      "password": "password",
+      "bucket": "YOUR BUCKET NAME",
+      "operator": "OPERATOR NAME",
+      "password": "PASSWORD",
       "domain": "https://cdn.xxxxx.com",
       "prefix": "your/folder/",
       "folder": "YYYY/MM/",
-      "imageVersion": ""
+      "suffix": ""
     }
   },
   // ...
 }
 ```
+
+Please notice that the values of prefix and folder, must end with `/` and begin without `/`.
+
+The prefix configuration means the folder that images would stored in.
+
+The folder configuration means the format of the folder you want to archive, it would be parsed by `moment()`, please follow the moment documentation.
+
+For example, an image is addressed `https://cdn.domain.com/image/blog/2017/07/image.jpg!large`, `https://cdn.domain.com` is corresponding `domain`, `image/blog/` is corresponding `prefix`, `2017/07/` is corresponding `YYYY/MM/`, `!large` is corresponding `suffix`.
 
 ## License
 
