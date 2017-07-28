@@ -2,13 +2,13 @@
   "storage": {
     "active": "ghost-upyun-store",
     "ghost-upyun-store": {
-      "bucket": "bucket-name",
-      "operator": "some-operator",
-      "password": "password",
+      "bucket": "YOUR BUCKET NAME",
+      "operator": "OPERATOR NAME",
+      "password": "PASSWORD",
       "domain": "https://cdn.xxxxx.com",
       "prefix": "your/folder/",
       "folder": "YYYY/MM/",
-      "imageVersion": ""
+      "suffix": ""
     }
   },
   "others": {}
