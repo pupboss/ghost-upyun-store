@@ -11,7 +11,7 @@ class UpyunAdapter extends BaseAdapter {
   constructor(options) {
     super(options);
     this.options = options || {};
-    const bucket = new upyun.Bucket(this.options.bucket, this.options.operator, this.options.password);
+    const bucket = new upyun.Service(this.options.bucket, this.options.operator, this.options.password);
     this.client = new upyun.Client(bucket);
   }
 
