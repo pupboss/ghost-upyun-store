@@ -1,6 +1,6 @@
 {
   "name": "ghost-upyun-store",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "description": "Ghost Upyun storage module.",
   "main": "index.js",
   "scripts": {
@@ -23,8 +23,8 @@
   "homepage": "https://github.com/pupboss/ghost-upyun-store#readme",
   "dependencies": {
     "bluebird": "^3.5.1",
-    "ghost-storage-base": "0.0.2",
-    "moment": "^2.19.3",
-    "upyun": "^3.3.4"
+    "ghost-storage-base": "0.0.3",
+    "moment": "^2.24.0",
+    "upyun": "^3.3.11"
   }
 }
